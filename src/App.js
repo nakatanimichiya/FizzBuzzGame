@@ -5,16 +5,15 @@ import Button from './components/Button';
 import Controller from './components/Controller';
 import './App.css';
 
-const defaultDifficulty = 1
 
-const Difficulty = [5000,3000,1000]
-
+//ゲームの状態
 const GameStatus = Object.freeze({
   init:'init',
   playing:'playing',
   gameover:'gameover'
 })
 
+//コントロールボタン
 const CountBtn = Object.freeze({
   fizzbuzz:'fizzbuzz',
   fizz:'fizz',
@@ -22,6 +21,7 @@ const CountBtn = Object.freeze({
   number:'number',
 })
 
+//keyとvalueで反対の方向をマッピングしているオブジェクト 　　？必要なのか？
 const OppositeCountBtn = Object.freeze({
   fizzbuzz:'fizzbuzz',
   fizz:'fizz',
@@ -29,6 +29,7 @@ const OppositeCountBtn = Object.freeze({
   number:'number',
 })
 
+// components/Controller.jsx の increment() を実行
 const Delta = Object.freeze({
   fizzbuzz: {increment},
   fizz:{increment},
@@ -36,7 +37,14 @@ const Delta = Object.freeze({
   number:{increment},
 })
 
+// ゲームレベル：初期値レベル
+const defaultDifficulty = 1
+
+//レベルに応じた制限時間
 const defaultInterval = 5000;
+const Difficulty = [5000,3000,1000]
+
+//ボタンを押した後の制限時間のリセット
 let timer = undefined;
 const unsubscribe = () => {
   if(!timer){
@@ -45,6 +53,7 @@ const unsubscribe = () => {
   clearInterval(timer);
 } 
 
+//ゲームのルールを条件分岐を用いて実装
 const gamingRule = (count) =>{
  if(count % 3 === 0 && count % 5 === 0){
    if(CountBtn.fizzbuzz){
@@ -75,11 +84,12 @@ const gamingRule = (count) =>{
 
 function App() {
   
-  const [status,setStatus]=useState(GameStatus.init);
-  const [difficulty,setDifficulty] = useState(defaultDifficulty)
-  const [countBtn, setCountBtn] = useState(CountBtn.number)
-  const [tick,setTick] = useState(0);
+  const [status,setStatus]=useState(GameStatus.init);　　　　　　　　//ゲーム状態
+  const [difficulty,setDifficulty] = useState(defaultDifficulty)  //難易度
+  const [countBtn, setCountBtn] = useState(CountBtn.number)       //ボタン
+  const [tick,setTick] = useState(0);                             //conutの更新
   
+  // 難易度選択
   const onChangeDifficulty = useCallback((difficulty) => {
     if(status !== GameStatus.init){
       return
@@ -89,7 +99,15 @@ function App() {
     } 
     setDifficulty(difficulty)
   },[status,difficulty])
-
+  
+  const handleCounting=()=>{
+    //const 現時点の数値を取得する変数
+    const delta = Delta[countBtn]
+    const newCountNum = {
+    　//新たな数値
+    }
+  }
+  
   useEffect(()=>{
     const interval = Difficulty[difficulty - 1]
     timer = setInterval(() =>{
@@ -97,7 +115,7 @@ function App() {
     },interval)
     return unsubscribe
   },[difficulty])
-
+  
   useEffect(()=>{
     if(status !== GameStatus.playing){
       // ボタンを押せないようにする
@@ -109,8 +127,10 @@ function App() {
     }
   }, [tick])
   
+  // スタートボタン
   const onStart  = () => setStatus(GameStatus.playing)
 
+  //ゲームオーバー後のスタートボタン
   const onRestart = () => {
     timer = setInterval(() => {
       setTick(tick => tick +1)
@@ -130,13 +150,6 @@ function App() {
     setCountBtn(newCountBtn)
   }
 
-  const handleCounting=()=>{
-    //const 現時点の数値を取得する変数
-    const delta = Delta[countBtn]
-    const newCountNum = {
-    　//新たな数値
-    }
-  }
 
   return (
     <div className="App">
