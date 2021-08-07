@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Controller = ({onChange}) => {
+const Controller = ({count, onChange, increment}) => {
 
     const onFizzBuzz = () => onChange('fizzbuzz')
     const onFizz = () => onChange('fizz')
     const onBuzz = () => onChange('buzz')
     const onNumber = () => onChange('number')
 
-    const [count, setCount] = useState(1); //stateを宣言
-    const increment = () => setCount(count + 1) //incrementボタンが押された時の関数
     
     return (
         <div className="controller">

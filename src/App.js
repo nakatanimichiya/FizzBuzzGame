@@ -29,13 +29,6 @@ const OppositeCountBtn = Object.freeze({
   number:'number',
 })
 
-// components/Controller.jsx の increment() を実行
-const Delta = Object.freeze({
-  fizzbuzz: {increment},
-  fizz:{increment},
-  buzz:{increment},
-  number:{increment},
-})
 
 // ゲームレベル：初期値レベル
 const defaultDifficulty = 1
@@ -53,34 +46,6 @@ const unsubscribe = () => {
   clearInterval(timer);
 } 
 
-//ゲームのルールを条件分岐を用いて実装
-const gamingRule = (count) =>{
- if(count % 3 === 0 && count % 5 === 0){
-   if(CountBtn.fizzbuzz){
-     increment();
-   }else{
-     alert("15の倍数でした...")
-   }
- }else if(count % 3 === 0){
-   if(CountBtn.fizz){
-     increment();
-   }else{
-     alert("3の倍数でした...")
-   }
- }else if(count % 5 === 0){
-   if(CountBtn.buzz){
-     increment();
-   }else{
-     alert("5の倍数でした...")
-   }
- }else{
-   if(CountBtn.number){
-     increment();
-   }else{
-     alert("Numberでした...")
-   }
- } 
-}
 
 function App() {
   
@@ -88,7 +53,46 @@ function App() {
   const [difficulty,setDifficulty] = useState(defaultDifficulty)  //難易度
   const [countBtn, setCountBtn] = useState(CountBtn.number)       //ボタン
   const [tick,setTick] = useState(0);                             //conutの更新
+  const [count, setCount] = useState(1);                          //stateを宣言
   
+  const increment = () => setCount(count + 1) //incrementボタンが押された時の関数
+  
+  const Delta = Object.freeze({
+    fizzbuzz: increment,
+    fizz:increment,
+    buzz:increment,
+    number:increment,
+  })
+  
+  //ゲームのルールを条件分岐を用いて実装
+  const gamingRule = (count) =>{
+    if(count % 3 === 0 && count % 5 === 0){
+      if(CountBtn.fizzbuzz){
+        increment();
+      }else{
+        alert("15の倍数でした...")
+      }
+    }else if(count % 3 === 0){
+      if(CountBtn.fizz){
+        increment();
+      }else{
+        alert("3の倍数でした...")
+      }
+    }else if(count % 5 === 0){
+      if(CountBtn.buzz){
+        increment();
+      }else{
+        alert("5の倍数でした...")
+      }
+    }else{
+      if(CountBtn.number){
+        increment();
+      }else{
+        alert("Numberでした...")
+      }
+    } 
+  }
+
   // 難易度選択
   const onChangeDifficulty = useCallback((difficulty) => {
     if(status !== GameStatus.init){
@@ -129,6 +133,7 @@ function App() {
   
   // スタートボタン
   const onStart  = () => setStatus(GameStatus.playing)
+  
 
   //ゲームオーバー後のスタートボタン
   const onRestart = () => {
@@ -161,7 +166,7 @@ function App() {
       </main>
       <footer className="footer">
         <Button status={status} onStart={onStart} onRestart={onRestart}/>
-        <Controller onChange={onChangeCountBtn}/>
+        <Controller increment={increment} onChange={onChangeCountBtn}/>
       </footer>
     </div>
   );
