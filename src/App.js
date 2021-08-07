@@ -64,31 +64,38 @@ function App() {
     number:increment,
   })
   
+  
   //ゲームのルールを条件分岐を用いて実装
-  const gamingRule = (count) =>{
+  const gamingRule = (count, newCountBtn) =>{
+    console.log(count)
+    console.log(newCountBtn)
     if(count % 3 === 0 && count % 5 === 0){
-      if(CountBtn.fizzbuzz){
-        increment();
+      if(newCountBtn === CountBtn.fizzbuzz){
+        return true
       }else{
         alert("15の倍数でした...")
+        return false
       }
     }else if(count % 3 === 0){
-      if(CountBtn.fizz){
-        increment();
+      if(newCountBtn === CountBtn.fizz){
+        return true
       }else{
         alert("3の倍数でした...")
+        return false
       }
     }else if(count % 5 === 0){
-      if(CountBtn.buzz){
-        increment();
+      if(newCountBtn === CountBtn.buzz){
+        return true
       }else{
         alert("5の倍数でした...")
+        return false
       }
-    }else{
-      if(CountBtn.number){
-        increment();
+    }else if(count % 3 !== 0 && count % 5 !== 0){
+      if(newCountBtn === CountBtn.number){
+        return true
       }else{
         alert("Numberでした...")
+        return false
       }
     } 
   }
@@ -104,11 +111,11 @@ function App() {
     setDifficulty(difficulty)
   },[status,difficulty])
   
-  const handleCounting=()=>{
+  const handleCounting=(count)=>{
     //const 現時点の数値を取得する変数
     const delta = Delta[countBtn]
     const newCountNum = {
-    　//新たな数値
+    　
     }
   }
   
@@ -144,15 +151,20 @@ function App() {
     setStatus(GameStatus.init)
     setCountBtn(CountBtn.number)
   }
-
+  
   const onChangeCountBtn = (newCountBtn)=>{
+    increment();
+    gamingRule(count + 1,newCountBtn);
+    // console.log(count)
+    console.log(count)
+    console.log(count + 1)
     if(status !== GameStatus.playing){
       return countBtn
     }
     if(OppositeCountBtn[countBtn] === newCountBtn){
       return
     }
-    setCountBtn(newCountBtn)
+    setCountBtn(newCountBtn);
   }
 
 
@@ -166,7 +178,7 @@ function App() {
       </main>
       <footer className="footer">
         <Button status={status} onStart={onStart} onRestart={onRestart}/>
-        <Controller increment={increment} onChange={onChangeCountBtn}/>
+        <Controller  onChange={onChangeCountBtn} count={count}/>
       </footer>
     </div>
   );
